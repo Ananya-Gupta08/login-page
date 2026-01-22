@@ -1,0 +1,24 @@
+import { useState } from "react";
+
+export default function VerifyOtp({ email, onVerified }) {
+  const [otp, setOtp] = useState("");
+
+  const verify = async () => {
+    const res = await fetch("http://localhost:5000/verify-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    });
+    const data = await res.json();
+    if (res.ok) onVerified(otp);
+    else alert(data.message);
+  };
+
+  return (
+    <div>
+      <h3>Verify OTP</h3>
+      <input placeholder="OTP" onChange={e => setOtp(e.target.value)} />
+      <button onClick={verify}>Verify</button>
+    </div>
+  );
+}
