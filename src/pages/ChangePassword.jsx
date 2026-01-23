@@ -7,7 +7,7 @@ export default function ChangePassword() {
   const submit = async () => {
     const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:5000/change-password", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/change-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

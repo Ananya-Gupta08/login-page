@@ -17,7 +17,7 @@ export default function Profile() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://localhost:5000/profile", {
+    fetch(`${import.meta.env.VITE_API_URL}/profile`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
