@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import ForgotFlow from "./pages/ForgotFlow";
+
+
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -14,6 +17,7 @@ function App() {
         {/* public routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotFlow />} />
 
         {/* protected route */}
         <Route
