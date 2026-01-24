@@ -3,6 +3,7 @@ console.log("PROFILE COMPONENT LOADED");
 import { useEffect, useState } from "react";
 import ChangePassword from "./ChangePassword";
 import { useNavigate } from "react-router-dom";
+import "../index.css";
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
@@ -30,7 +31,7 @@ export default function Profile() {
   if (!user) return <p>Loading...</p>;
 
   return (
-    <div className="bound" style={{ padding: "20px" }}>
+    <div className="auth-card" style={{ padding: "20px" }}>
       <h2>Profile</h2>
 
       {/* User info */}
@@ -52,7 +53,7 @@ export default function Profile() {
       <br /><br />
 
       {/* Logout */}
-      <button onClick={logout}>Logout</button>
+      <button style={{ marginTop: "10px", background: "#dc2626" }} onClick={logout}>Logout</button>
     </div>
   );
 }

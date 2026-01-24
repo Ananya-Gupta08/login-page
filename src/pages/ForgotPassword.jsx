@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import "../index.css";
 export default function ForgotPassword({ onNext }) {
   const [email, setEmail] = useState("");
 
@@ -16,10 +16,15 @@ export default function ForgotPassword({ onNext }) {
   };
 
   return (
-    <div className="bound">
+   
+    <div className="auth-card">
       <h3>Forgot Password</h3>
+      <p className="auth-subtext">
+        Enter your registered email to receive an OTP
+      </p>
       <input placeholder="Email" onChange={e => setEmail(e.target.value)} />
       <button onClick={sendOtp}>Send OTP</button>
     </div>
+   
   );
 }

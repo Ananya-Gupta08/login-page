@@ -21,6 +21,7 @@ export default function ChangePassword() {
   };
 
   return (
+   
     <div className="bound">
       <h3>Change Password</h3>
       <input
@@ -35,5 +36,6 @@ export default function ChangePassword() {
       />
       <button onClick={submit}>Update</button>
     </div>
+   
   );
 }

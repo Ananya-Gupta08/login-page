@@ -22,8 +22,8 @@ export default function ForgotFlow() {
       {step === 2 && (
         <VerifyOtp
           email={email}
-          onVerified={(verifiedOtp) => {
-            setOtp(otp);
+          onVerified={() => {
+           
             setStep(3);
           }}
         />
@@ -32,10 +32,11 @@ export default function ForgotFlow() {
       {step === 3 && (
         <ResetPassword
             email={email}
-            otp={otp}
+           
             onNext={() => {
                 alert("Password reset successful. Please login.");
-                setStep(1); 
+                window.location.href = "/login"; 
+              
               }}
         />
 )}

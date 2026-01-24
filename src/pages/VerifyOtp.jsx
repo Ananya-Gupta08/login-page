@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../index.css";
 
 export default function VerifyOtp({ email, onVerified }) {
   const [otp, setOtp] = useState("");
@@ -15,10 +16,15 @@ export default function VerifyOtp({ email, onVerified }) {
   };
 
   return (
-    <div>
+   
+    <div className="auth-card">
       <h3>Verify OTP</h3>
+       <p className="auth-subtext">
+        Enter the 6-digit OTP sent to {email}
+      </p>
       <input placeholder="OTP" onChange={e => setOtp(e.target.value)} />
       <button onClick={verify}>Verify</button>
     </div>
+ 
   );
 }
