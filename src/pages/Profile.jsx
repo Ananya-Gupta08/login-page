@@ -3,7 +3,7 @@ console.log("PROFILE COMPONENT LOADED");
 import { useEffect, useState } from "react";
 import ChangePassword from "./ChangePassword";
 import { useNavigate } from "react-router-dom";
-import "../index.css";
+// import "../index.css";
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [showChangePassword, setShowChangePassword] = useState(false);

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../index.css";
+// import "../index.css";
 export default function ResetPassword({ email, onNext  }) {
   const [newPassword, setNewPassword] = useState("");
 
