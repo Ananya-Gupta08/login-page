@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../index.css";
+// import "../index.css";
 
 export default function VerifyOtp({ email, onVerified }) {
   const [otp, setOtp] = useState("");
