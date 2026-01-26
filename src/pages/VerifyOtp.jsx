@@ -11,8 +11,13 @@ export default function VerifyOtp({ email, onVerified }) {
       body: JSON.stringify({ email, otp }),
     });
     const data = await res.json();
-    if (res.ok) onVerified(otp);
-    else alert(data.message);
+    if (!res.ok) {
+    alert(data.message);
+    return;
+  }
+
+  alert(data.message);
+  onVerified(); // go to reset page
   };
 
   return (
