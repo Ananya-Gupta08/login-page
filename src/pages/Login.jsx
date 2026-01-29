@@ -32,6 +32,10 @@ export default function Login() {
     }
     
   };
+const googleLogin = (e) => {
+  e.preventDefault();
+      window.location.href=`${import.meta.env.VITE_API_URL}/auth/google`;
+  }
 
   //forgetpass 
   // if (showForgot) {
@@ -79,6 +83,9 @@ export default function Login() {
        {/* forgot password btn  */}
       <button style={{ background: "none", color: "blue", border: "none" }}onClick={() => navigate("/forgot-password")}>
          Forgot Password?
+      </button>
+      <button type="button" onClick={googleLogin} className="google-btn">
+        Continue with Google
       </button>
 
     </div>

@@ -4,10 +4,11 @@ import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import ForgotFlow from "./pages/ForgotFlow";
 
-
+import GoogleSuccess from "./pages/GoogleSuccess";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
+  console.log(import.meta.env.VITE_API_URL);
   return (
     <BrowserRouter>
       <Routes>
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotFlow />} />
+        <Route path="/google-success" element={<GoogleSuccess />} />
 
         {/* protected route */}
         <Route
@@ -27,6 +29,7 @@ function App() {
               <Profile />
             </ProtectedRoute>
           }
+          
         />
         
       </Routes>

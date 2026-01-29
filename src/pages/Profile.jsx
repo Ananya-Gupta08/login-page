@@ -8,6 +8,12 @@ export default function Profile() {
   const [user, setUser] = useState(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const navigate = useNavigate();
+  const res =  fetch(`${import.meta.env.VITE_API_URL}/profile`, {
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+});
+
 
   const logout = () => {
     localStorage.removeItem("token");
