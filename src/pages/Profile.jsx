@@ -1,37 +1,40 @@
-console.log("PROFILE COMPONENT LOADED");
-
 import { useEffect, useState } from "react";
 import ChangePassword from "./ChangePassword";
 import { useNavigate } from "react-router-dom";
-// import "../index.css";
+
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const navigate = useNavigate();
-  const res =  fetch(`${import.meta.env.VITE_API_URL}/profile`, {
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-  },
-});
-
 
   const logout = () => {
     localStorage.removeItem("token");
-    // window.location.reload();
     navigate("/login");
   };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
+    if (!token) {
+      logout();
+      return;
+    }
+
     fetch(`${import.meta.env.VITE_API_URL}/profile`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) => res.json())
-      .then((data) => setUser(data))
-      .catch(() => logout());  
+      .then((res) => {
+        if (!res.ok) throw new Error("Unauthorized");
+        return res.json();
+      })
+      .then((data) => {
+        setUser(data);
+      })
+      .catch(() => {
+        logout();
+      });
   }, []);
 
   if (!user) return <p>Loading...</p>;
@@ -40,26 +43,27 @@ export default function Profile() {
     <div className="auth-card" style={{ padding: "20px" }}>
       <h2>Profile</h2>
 
-      {/* User info */}
       <p><strong>Name:</strong> {user.name}</p>
       <p><strong>Email:</strong> {user.email}</p>
 
       <br />
 
-      {/* Change password toggle */}
       <button onClick={() => setShowChangePassword(!showChangePassword)}>
         {showChangePassword ? "Close Change Password" : "Change Password"}
       </button>
 
       <br /><br />
 
-      
       {showChangePassword && <ChangePassword />}
 
       <br /><br />
 
-      {/* Logout */}
-      <button style={{ marginTop: "10px", background: "#dc2626" }} onClick={logout}>Logout</button>
+      <button
+        style={{ marginTop: "10px", background: "#dc2626" }}
+        onClick={logout}
+      >
+        Logout
+      </button>
     </div>
   );
 }
