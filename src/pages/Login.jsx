@@ -39,7 +39,7 @@ const googleLogin = async (e) => {
     console.log("Google login clicked");
     console.log("API URL:", import.meta.env.VITE_API_URL);
 
-    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`;
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google.js`;
   } catch (error) {
     console.error("Google Login Error:", error);
   }
