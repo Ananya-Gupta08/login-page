@@ -32,10 +32,18 @@ export default function Login() {
     }
     
   };
-const googleLogin = (e) => {
+const googleLogin = async (e) => {
   e.preventDefault();
-      window.location.href=`${import.meta.env.VITE_API_URL}/api/auth/google`;
+
+  try {
+    console.log("Google login clicked");
+    console.log("API URL:", import.meta.env.VITE_API_URL);
+
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`;
+  } catch (error) {
+    console.error("Google Login Error:", error);
   }
+};
 
   //forgetpass 
   // if (showForgot) {
