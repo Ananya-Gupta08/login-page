@@ -4,7 +4,7 @@ export default function ResetPassword({ email, onNext  }) {
   const [newPassword, setNewPassword] = useState("");
 
   const reset = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/reset-password`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reset-password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, newPassword }),

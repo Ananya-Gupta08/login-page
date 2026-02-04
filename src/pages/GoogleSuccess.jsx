@@ -16,6 +16,7 @@ export default function GoogleSuccess() {
 
     localStorage.setItem("token", token);
     navigate("/profile");
+    console.log("TOKEN:", token);
   }, []);
 
   return <p>Logging you in...</p>;

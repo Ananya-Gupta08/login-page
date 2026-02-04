@@ -20,7 +20,7 @@ export default function Profile() {
       return;
     }
 
-    fetch(`${import.meta.env.VITE_API_URL}/profile`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/profile`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
