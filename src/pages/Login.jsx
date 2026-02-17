@@ -22,10 +22,17 @@ export default function Login() {
     const data = await res.json();
 
     if (res.ok) {
-      localStorage.setItem("token", data.token);
+       localStorage.setItem("token", data.token);  
+      localStorage.setItem("user", JSON.stringify(data.user)); 
+      const role = data.user.role;
+
+      if (role === "admin") navigate("/admin");
+      else if (role === "manager") navigate("/manager");
+      else if (role === "staff") navigate("/staff");
+      else navigate("/customer"); // default
      
       alert("Login successful");
-      navigate("/profile");
+      // navigate("/profile");
       
     } else {
       alert(data.message);
@@ -39,7 +46,7 @@ const googleLogin = async (e) => {
     console.log("Google login clicked");
     console.log("API URL:", import.meta.env.VITE_API_URL);
 
-    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google.js`;
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`;
   } catch (error) {
     console.error("Google Login Error:", error);
   }
