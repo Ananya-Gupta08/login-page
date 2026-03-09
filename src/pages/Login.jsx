@@ -1,9 +1,10 @@
 import { useState } from "react";
 // import ForgotFlow from "./ForgotFlow";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "./context/AuthContext";
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,8 +23,7 @@ export default function Login() {
     const data = await res.json();
 
     if (res.ok) {
-       localStorage.setItem("token", data.token);  
-      localStorage.setItem("user", JSON.stringify(data.user)); 
+      login(data.user, data.token);
       const role = data.user.role;
 
       if (role === "admin") navigate("/admin");
