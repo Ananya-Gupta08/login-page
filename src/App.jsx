@@ -11,6 +11,9 @@ import CustomerDashboard from "./pages/customer/CustomerDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManagerDashboard from "./pages/manager/ManagerDashboard";
 import StaffDashboard from "./pages/staff/StaffDashboard";
+import AdminLayout from "./pages/admin/AdminLayout";
+import ManageUsers from "./pages/admin/ManageUsers";
+
 
 function App() {
   console.log(import.meta.env.VITE_API_URL);

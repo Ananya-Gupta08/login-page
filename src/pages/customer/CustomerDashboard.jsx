@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../services/api";
 import Profile from "../Profile";
 import { useNavigate } from "react-router-dom";
-import {useAuth} from "../context/authContext";
+import {useAuth} from "../context/AuthContext";
 
 export default function ManagerDashboard() {
   const [data, setData] = useState(null);

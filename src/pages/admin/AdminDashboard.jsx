@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import API from "../services/api";
 import { useNavigate } from "react-router-dom";
 
-import {useAuth} from "../context/authContext";
+import {useAuth} from "../context/AuthContext";
 export default function AdminDashboard() {
   const [data, setData] = useState(null);
-  const {logout}=useAuth();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -16,26 +18,50 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
+        setLoading(true);
         const res = await API.get("/admin/dashboard");
         setData(res.data);
       } catch (err) {
         console.error(err);
+        setError("Failed to load dashboard data.");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchDashboard();
   }, []);
 
-  if (!data) return <p>Loading...</p>;
-
+  if (loading) return <p>Loading dashboard...</p>;
   return (
-    <div>
-      <h2>Admin Dashboard</h2>
-      <p>Total Users: {data.totalUsers}</p>
-      <p>Total Staff: {data.totalStaff}</p>
-      <p>Total Managers: {data.totalManagers}</p>
-      <p>Total Customers: {data.totalCustomers}</p>
-      <button onClick={handleLogout}>Logout</button>
+    <div className="content">
+      <div className="dashboard admin-dashboard">
+        <h2>Admin Dashboard</h2>
+      {error && <p className="auth-message" style={{ color: "#e53e3e" }}>{error}</p>}
+      {!error && data && (
+        <div className="stats">
+          <div className="stat">
+            <span>Total Users </span> 
+            <strong>{data.totalUsers}</strong>
+          </div>
+          <div className="stat">
+            <span>Total Staff </span>
+            <strong>{data.totalStaff}</strong>
+          </div>
+          <div className="stat">
+            <span>Total Managers </span>
+            <strong>{data.totalManagers}</strong>
+          </div>
+          <div className="stat">
+            <span>Total Customers </span>
+            <strong>{data.totalCustomers}</strong>
+          </div>
+        </div>
+      )}
+      <button className="logout-btn" onClick={handleLogout}>
+        Logout
+      </button>
+      </div>
     </div>
   );
 }
