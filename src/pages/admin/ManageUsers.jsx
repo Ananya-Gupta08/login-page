@@ -19,13 +19,16 @@ export default function ManageUsers() {
     }
   };
 
+
   const deactivateUser = async (id) => {
     if (!window.confirm("Are you sure you want to deactivate this user?")) {
       return;
     }
     try {
+      console.log("Deactivating user with ID:", id);
       await API.patch(`/admin/deactivate/${id}`);
       fetchUsers();
+      console.log("User deactivated successfully.");
     } catch (err) {
       console.error(err);
       setError("Failed to update user status.");

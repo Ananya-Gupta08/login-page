@@ -4,7 +4,7 @@ import Profile from "../Profile";
 import { useNavigate } from "react-router-dom";
 import {useAuth} from "../context/AuthContext";
 
-export default function ManagerDashboard() {
+export default function CustomerDashoard() {
   const [data, setData] = useState(null);
   const {logout}=useAuth();
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export default function ManagerDashboard() {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const res = await API.get("/manager/dashboard");
+        const res = await API.get("/customer/dashboard");
         setData(res.data);
       } catch (err) {
         console.error(err);
@@ -32,7 +32,7 @@ export default function ManagerDashboard() {
 
   return (
     <div>
-      <h2>Manager Dashboard</h2>
+      <h2>Customer Dashboard</h2>
       <p>{data.message}</p>
       <button onClick={handleLogout}>Logout</button>
       <Profile />
