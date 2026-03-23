@@ -269,6 +269,142 @@ form button:active {
   background: #c53030;
 }
 
+.btn-create {
+  padding: 10px 20px;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 20px;
+}
+
+.btn-create:hover {
+  background: #625ca5;
+}
+
+.btn-delete {
+  padding: 6px 12px;
+  background: #e53e3e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 10px;
+}
+
+.btn-delete:hover {
+  background: #c53030;
+}
+
+.create-user-form {
+  background: #f7fafc;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.create-user-form div {
+  margin-bottom: 15px;
+}
+
+.create-user-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.create-user-form input,
+.create-user-form select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.create-user-form button {
+  padding: 10px 20px;
+  background: #38a169;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.create-user-form button:hover {
+  background: #2f855a;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-update {
+  padding: 6px 12px;
+  background: #3182ce;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-update:hover {
+  background: #2c5282;
+}
+
+.btn-save {
+  padding: 6px 12px;
+  background: #38a169;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 8px;
+}
+
+.btn-save:hover {
+  background: #2f855a;
+}
+
+.btn-cancel {
+  padding: 6px 12px;
+  background: #718096;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 8px;
+}
+
+.btn-cancel:hover {
+  background: #4a5568;
+}
+
+/* ===== ROLE UPDATE CONTROLS ===== */
+.role-update-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.role-select {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 120px;
+}
+
 /* ===== ADMIN SIDEBAR ===== */
 .admin-sidebar {
   position: fixed;

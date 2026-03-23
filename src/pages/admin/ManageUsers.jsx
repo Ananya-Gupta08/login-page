@@ -5,6 +5,15 @@ export default function ManageUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [newUser, setNewUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "customer"
+  });
+  const [editingUserId, setEditingUserId] = useState(null);
+  const [selectedRole, setSelectedRole] = useState("customer");
 
   const fetchUsers = async () => {
     try {
@@ -19,6 +28,53 @@ export default function ManageUsers() {
     }
   };
 
+  const createUser = async (e) => {
+    e.preventDefault();
+    try {
+      await API.post("/admin/create-user", newUser);
+      setNewUser({ name: "", email: "", password: "", role: "customer" });
+      setShowCreateForm(false);
+      fetchUsers();
+    } catch (err) {
+      console.error(err);
+      setError("Failed to create user.");
+    }
+  };
+
+  const updateUserRole = async (id, newRole) => {
+    try {
+      await API.patch(`/admin/update-role/${id}`, { role: newRole });
+      fetchUsers();
+      setEditingUserId(null);
+      setSelectedRole("customer");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to update user role.");
+    }
+  };
+
+  const startEditingRole = (user) => {
+    setEditingUserId(user._id);
+    setSelectedRole(user.role);
+  };
+
+  const cancelEditingRole = () => {
+    setEditingUserId(null);
+    setSelectedRole("customer");
+  };
+
+  const deleteUser = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
+      return;
+    }
+    try {
+      await API.delete(`/admin/delete-user/${id}`);
+      fetchUsers();
+    } catch (err) {
+      console.error(err);
+      setError("Failed to delete user.");
+    }
+  };
 
   const deactivateUser = async (id) => {
     if (!window.confirm("Are you sure you want to deactivate this user?")) {
@@ -43,6 +99,58 @@ export default function ManageUsers() {
     <div className="content">
       <div className="dashboard manage-users">
         <h2>Manage Users</h2>
+
+        <button
+          className="btn-create"
+          onClick={() => setShowCreateForm(!showCreateForm)}
+        >
+          {showCreateForm ? "Cancel" : "Create New User"}
+        </button>
+
+        {showCreateForm && (
+          <form onSubmit={createUser} className="create-user-form">
+            <div>
+              <label>Name:</label>
+              <input
+                type="text"
+                value={newUser.name}
+                onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <label>Email:</label>
+              <input
+                type="email"
+                value={newUser.email}
+                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <label>Password:</label>
+              <input
+                type="password"
+                value={newUser.password}
+                onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <label>Role:</label>
+              <select
+                value={newUser.role}
+                onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
+              >
+                <option value="customer">Customer</option>
+                <option value="staff">Staff</option>
+                <option value="manager">Manager</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <button type="submit">Create User</button>
+          </form>
+        )}
 
       {loading && <p>Loading users...</p>}
       {error && <p className="auth-message" style={{ color: "#e53e3e" }}>{error}</p>}
@@ -72,13 +180,54 @@ export default function ManageUsers() {
                       {user.accountStatus}
                     </td>
                     <td>
-                      {user.accountStatus === "Active" && (
-                        <button
-                          className="btn-deactivate"
-                          onClick={() => deactivateUser(user._id)}
-                        >
-                          Deactivate
-                        </button>
+                      {editingUserId === user._id ? (
+                        <div className="role-update-controls">
+                          <select
+                            value={selectedRole}
+                            onChange={(e) => setSelectedRole(e.target.value)}
+                            className="role-select"
+                          >
+                            <option value="customer">Customer</option>
+                            <option value="staff">Staff</option>
+                            <option value="manager">Manager</option>
+                            <option value="admin">Admin</option>
+                          </select>
+                          <button
+                            className="btn-save"
+                            onClick={() => updateUserRole(user._id, selectedRole)}
+                          >
+                            Save
+                          </button>
+                          <button
+                            className="btn-cancel"
+                            onClick={cancelEditingRole}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="action-buttons">
+                          <button
+                            className="btn-update"
+                            onClick={() => startEditingRole(user)}
+                          >
+                            Update
+                          </button>
+                          {user.accountStatus === "Active" && (
+                            <button
+                              className="btn-deactivate"
+                              onClick={() => deactivateUser(user._id)}
+                            >
+                              Deactivate
+                            </button>
+                          )}
+                          <button
+                            className="btn-delete"
+                            onClick={() => deleteUser(user._id)}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       )}
                     </td>
                   </tr>
