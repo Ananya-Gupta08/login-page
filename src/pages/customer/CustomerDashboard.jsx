@@ -58,33 +58,91 @@ export default function CustomerDashoard() {
 
   if (!data) return <p>Loading...</p>;
   return (
-    <div>
-      <h2>Customer Dashboard</h2>
-      <p>{data.message}</p>
-      <h3>Create Ticket</h3>
-      <input
-        type="text"
-        placeholder="Title" 
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-      />
-      <textarea
-        placeholder="Description" 
-        value={description}
-        onChange={e => setDescription(e.target.value)}
-      />
-      <button onClick={createTicket}>Create Ticket</button>
-      <h3>My Tickets</h3>
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif", maxWidth: "900px", margin: "0 auto" }}>
+      <h2 style={{ color: "#333", marginBottom: "10px" }}>Customer Dashboard</h2>
+      <p style={{ color: "#666", marginBottom: "30px" }}>{data.message}</p>
       
-      {tickets.map(ticket => (
-        <div key={ticket._id}>
-          <h4>{ticket.title}</h4>
-          <p>{ticket.description}</p>
-          <span>Status:{ticket.status}</span>
-        </div>
-      ))}
-      <button onClick={handleLogout}>Logout</button>
-      <Profile />
+      <div style={{ backgroundColor: "#f5f5f5", padding: "20px", borderRadius: "8px", marginBottom: "30px" }}>
+        <h3 style={{ color: "#333", marginTop: "0", marginBottom: "15px" }}>Create Ticket</h3>
+        <input
+          type="text"
+          placeholder="Title" 
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "10px",
+            marginBottom: "12px",
+            border: "1px solid #ddd",
+            borderRadius: "4px",
+            boxSizing: "border-box",
+            fontSize: "14px"
+          }}
+        />
+        <textarea
+          placeholder="Description" 
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "10px",
+            marginBottom: "12px",
+            border: "1px solid #ddd",
+            borderRadius: "4px",
+            boxSizing: "border-box",
+            fontSize: "14px",
+            minHeight: "80px",
+            fontFamily: "Arial, sans-serif"
+          }}
+        />
+        <button onClick={createTicket} style={{
+          padding: "10px 20px",
+          backgroundColor: "#2196F3",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+          fontSize: "14px"
+        }}>Create Ticket</button>
+      </div>
+
+      <h3 style={{ color: "#333", borderBottom: "2px solid #333", paddingBottom: "10px", marginBottom: "20px" }}>My Tickets</h3>
+      
+      {tickets.length === 0 ? (
+        <p style={{ textAlign: "center", color: "#999", marginTop: "20px" }}>No tickets yet</p>
+      ) : (
+        tickets.map(ticket => (
+          <div key={ticket._id} style={{
+            border: "1px solid #ddd",
+            borderRadius: "8px",
+            padding: "15px",
+            marginBottom: "15px",
+            backgroundColor: "#fff",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+          }}>
+            <h4 style={{ margin: "0 0 8px 0", color: "#333" }}>{ticket.title}</h4>
+            <p style={{ color: "#666", margin: "8px 0" }}>{ticket.description}</p>
+            <p style={{ margin: "8px 0", fontSize: "14px" }}>
+              <strong>Status:</strong> <span style={{ color: "#2196F3", fontWeight: "bold" }}>{ticket.status}</span>
+            </p>
+          </div>
+        ))
+      )}
+
+      <button onClick={handleLogout} style={{
+        padding: "10px 20px",
+        backgroundColor: "#f44336",
+        color: "white",
+        border: "none",
+        borderRadius: "4px",
+        cursor: "pointer",
+        fontSize: "14px",
+        marginTop: "20px"
+      }}>Logout</button>
+      
+      <div style={{ marginTop: "30px" }}>
+        <Profile />
+      </div>
     </div>
   );
 }
