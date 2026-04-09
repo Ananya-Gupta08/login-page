@@ -14,6 +14,16 @@ export default function ManageUsers() {
   });
   const [editingUserId, setEditingUserId] = useState(null);
   const [selectedRole, setSelectedRole] = useState("customer");
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 10;
+  const totalPages = Math.max(1, Math.ceil(users.length / usersPerPage));
+  const currentUsers = users.slice((currentPage - 1) * usersPerPage, currentPage * usersPerPage);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   const fetchUsers = async () => {
     try {
@@ -160,80 +170,102 @@ export default function ManageUsers() {
           {users.length === 0 ? (
             <p>No users found.</p>
           ) : (
-            <table className="users-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user._id}>
-                    <td>{user.name}</td>
-                    <td>{user.role}</td>
-                    <td className={
-                      user.accountStatus === "Active" ? "status-active" : "status-inactive"
-                    }>
-                      {user.accountStatus}
-                    </td>
-                    <td>
-                      {editingUserId === user._id ? (
-                        <div className="role-update-controls">
-                          <select
-                            value={selectedRole}
-                            onChange={(e) => setSelectedRole(e.target.value)}
-                            className="role-select"
-                          >
-                            <option value="customer">Customer</option>
-                            <option value="staff">Staff</option>
-                            <option value="manager">Manager</option>
-                            <option value="admin">Admin</option>
-                          </select>
-                          <button
-                            className="btn-save"
-                            onClick={() => updateUserRole(user._id, selectedRole)}
-                          >
-                            Save
-                          </button>
-                          <button
-                            className="btn-cancel"
-                            onClick={cancelEditingRole}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="action-buttons">
-                          <button
-                            className="btn-update"
-                            onClick={() => startEditingRole(user)}
-                          >
-                            Update
-                          </button>
-                          {user.accountStatus === "Active" && (
-                            <button
-                              className="btn-deactivate"
-                              onClick={() => deactivateUser(user._id)}
-                            >
-                              Deactivate
-                            </button>
-                          )}
-                          <button
-                            className="btn-delete"
-                            onClick={() => deleteUser(user._id)}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      )}
-                    </td>
+            <>
+              <table className="users-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {currentUsers.map((user) => (
+                    <tr key={user._id}>
+                      <td>{user.name}</td>
+                      <td>{user.role}</td>
+                      <td className={
+                        user.accountStatus === "Active" ? "status-active" : "status-inactive"
+                      }>
+                        {user.accountStatus}
+                      </td>
+                      <td>
+                        {editingUserId === user._id ? (
+                          <div className="role-update-controls">
+                            <select
+                              value={selectedRole}
+                              onChange={(e) => setSelectedRole(e.target.value)}
+                              className="role-select"
+                            >
+                              <option value="customer">Customer</option>
+                              <option value="staff">Staff</option>
+                              <option value="manager">Manager</option>
+                              <option value="admin">Admin</option>
+                            </select>
+                            <button
+                              className="btn-save"
+                              onClick={() => updateUserRole(user._id, selectedRole)}
+                            >
+                              Save
+                            </button>
+                            <button
+                              className="btn-cancel"
+                              onClick={cancelEditingRole}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="action-buttons">
+                            <button
+                              className="btn-update"
+                              onClick={() => startEditingRole(user)}
+                            >
+                              Update
+                            </button>
+                            {user.accountStatus === "Active" && (
+                              <button
+                                className="btn-deactivate"
+                                onClick={() => deactivateUser(user._id)}
+                              >
+                                Deactivate
+                              </button>
+                            )}
+                            <button
+                              className="btn-delete"
+                              onClick={() => deleteUser(user._id)}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {totalPages > 1 && (
+                <div className="pagination-controls" style={{ marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center", gap: "12px" }}>
+                  <button
+                    className="btn-pagination"
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </button>
+                  <span>Page {currentPage} of {totalPages}</span>
+                  <button
+                    className="btn-pagination"
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </>
       )}
