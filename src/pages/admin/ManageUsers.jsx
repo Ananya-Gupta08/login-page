@@ -14,16 +14,24 @@ export default function ManageUsers() {
   });
   const [editingUserId, setEditingUserId] = useState(null);
   const [selectedRole, setSelectedRole] = useState("customer");
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 10;
-  const totalPages = Math.max(1, Math.ceil(users.length / usersPerPage));
-  const currentUsers = users.slice((currentPage - 1) * usersPerPage, currentPage * usersPerPage);
+  const filteredUsers = users.filter((user) =>
+    user.name?.toLowerCase().includes(searchQuery.trim().toLowerCase())
+  );
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / usersPerPage));
+  const currentUsers = filteredUsers.slice((currentPage - 1) * usersPerPage, currentPage * usersPerPage);
 
   useEffect(() => {
     if (currentPage > totalPages) {
       setCurrentPage(totalPages);
     }
   }, [currentPage, totalPages]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
 
   const fetchUsers = async () => {
     try {
@@ -117,6 +125,17 @@ export default function ManageUsers() {
           {showCreateForm ? "Cancel" : "Create New User"}
         </button>
 
+        <div className="search-controls" style={{ margin: "20px 0" }}>
+          <input
+            type="text"
+            placeholder="Search employees by name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+            style={{ padding: "8px 12px", width: "100%", maxWidth: "360px" }}
+          />
+        </div>
+
         {showCreateForm && (
           <form onSubmit={createUser} className="create-user-form">
             <div>
@@ -167,8 +186,8 @@ export default function ManageUsers() {
 
       {!loading && !error && (
         <>
-          {users.length === 0 ? (
-            <p>No users found.</p>
+          {filteredUsers.length === 0 ? (
+            <p>No matching employees found.</p>
           ) : (
             <>
               <table className="users-table">
