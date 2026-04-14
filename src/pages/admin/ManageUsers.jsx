@@ -14,6 +14,9 @@ export default function ManageUsers() {
   });
   const [editingUserId, setEditingUserId] = useState(null);
   const [selectedRole, setSelectedRole] = useState("customer");
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [userTickets, setUserTickets] = useState([]);
+  const [profileLoading, setProfileLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 10;
@@ -107,6 +110,26 @@ export default function ManageUsers() {
       console.error(err);
       setError("Failed to update user status.");
     }
+  };
+
+  const fetchUserProfile = async (id) => {
+    try {
+      setError("");
+      setProfileLoading(true);
+      const res = await API.get(`/admin/users/${id}`);
+      setSelectedUser(res.data.user);
+      setUserTickets(res.data.tickets || []);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to load user profile.");
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  const closeModal = () => {
+    setSelectedUser(null);
+    setUserTickets([]);
   };
 
   useEffect(() => {
@@ -238,6 +261,12 @@ export default function ManageUsers() {
                         ) : (
                           <div className="action-buttons">
                             <button
+                              className="btn-view"
+                              onClick={() => fetchUserProfile(user._id)}
+                            >
+                              View
+                            </button>
+                            <button
                               className="btn-update"
                               onClick={() => startEditingRole(user)}
                             >
@@ -287,6 +316,79 @@ export default function ManageUsers() {
             </>
           )}
         </>
+      )}
+      {selectedUser && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Employee Profile</h3>
+              <button className="modal-close" onClick={closeModal}>
+                ×
+              </button>
+            </div>
+            {profileLoading ? (
+              <p>Loading profile...</p>
+            ) : (
+              <>
+                <div className="profile-details">
+                  <p><strong>Name:</strong> {selectedUser.name}</p>
+                  <p><strong>Email:</strong> {selectedUser.email}</p>
+                  <p><strong>Role:</strong> {selectedUser.role}</p>
+                  <p><strong>Status:</strong> {selectedUser.accountStatus}</p>
+                  <p><strong>Provider:</strong> {selectedUser.authProvider || "local"}</p>
+                </div>
+                <div className="ticket-history-section">
+                  <h4>Ticket History</h4>
+                  {userTickets.length === 0 ? (
+                    <p>No tickets found for this employee.</p>
+                  ) : (
+                    <table className="users-table ticket-table">
+                      <thead>
+                        <tr>
+                          <th>Title</th>
+                          <th>Status</th>
+                          <th>Assigned Role</th>
+                          <th>Created At</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {userTickets.map((ticket) => (
+                          <tr key={ticket._id}>
+                            <td>{ticket.title}</td>
+                            <td>{ticket.status}</td>
+                            <td>{ticket.currentRole}</td>
+                            <td>{new Date(ticket.createdAt).toLocaleString()}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                  {userTickets.length > 0 && (
+                    <div className="ticket-history-details">
+                      <h5>Ticket Events</h5>
+                      {userTickets.map((ticket) => (
+                        <div key={`history-${ticket._id}`} className="ticket-history-card">
+                          <h6>{ticket.title}</h6>
+                          {ticket.history?.length ? (
+                            <ul>
+                              {ticket.history.map((event, idx) => (
+                                <li key={idx}>
+                                  <strong>{event.action}</strong> ({event.role}) - {new Date(event.timestamp).toLocaleString()}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p>No event history available.</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       )}
     </div>
     </div>

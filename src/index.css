@@ -361,6 +361,20 @@ form button:active {
   background: #2c5282;
 }
 
+.btn-view {
+  padding: 6px 12px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-view:hover {
+  background: #1d4ed8;
+}
+
 .btn-save {
   padding: 6px 12px;
   background: #38a169;
@@ -403,6 +417,80 @@ form button:active {
   border: 1px solid #ccc;
   border-radius: 4px;
   min-width: 120px;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 50;
+}
+
+.modal-content {
+  width: min(100%, 900px);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.25);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.profile-details p,
+.ticket-history-section p {
+  margin: 8px 0;
+}
+
+.ticket-history-section h4,
+.ticket-history-details h5 {
+  margin: 18px 0 12px;
+}
+
+.ticket-history-card {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.ticket-history-card h6 {
+  margin-bottom: 10px;
+}
+
+.ticket-history-card ul {
+  list-style: disc inside;
+  margin: 0;
+  padding: 0;
+}
+
+.ticket-history-card li {
+  margin-bottom: 6px;
+}
+
+.ticket-table th,
+.ticket-table td {
+  padding: 10px 8px;
 }
 
 /* ===== ADMIN SIDEBAR ===== */
