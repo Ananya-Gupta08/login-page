@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {useAuth} from "../context/AuthContext";
 export default function StaffDashboard() {
   const [data, setData] = useState(null);
+  const [message, setMessage] = useState("");
   const {logout}=useAuth();
   const navigate = useNavigate();
   const[tickets,setTickets]=useState([]);
@@ -45,15 +46,18 @@ export default function StaffDashboard() {
   const takeAction = async (id, action) => {
     try {
       await API.put(`/tickets/action/${id}`, { action });
+      setMessage("Ticket updated successfully.");
       fetchTickets();
     } catch (err) {
       console.error(err);
+      setMessage("Ticket action failed. Please try again.");
     }
   };
  if (!data) return <p>Loading...</p>;
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif", maxWidth: "900px", margin: "0 auto" }}>
       <h2 style={{ color: "#333", marginBottom: "10px" }}>Staff Dashboard</h2>
+      {message && <p style={{ color: "#2d6a4f", marginBottom: "20px" }}>{message}</p>}
       <p style={{ color: "#666", marginBottom: "30px" }}>{data.message}</p>
       
       <h3 style={{ color: "#333", borderBottom: "2px solid #333", paddingBottom: "10px", marginBottom: "20px" }}>Tickets</h3>

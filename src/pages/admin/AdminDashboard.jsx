@@ -7,6 +7,7 @@ export default function AdminDashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const { logout } = useAuth();
   const navigate = useNavigate();
   const[tickets,setTickets]=useState([]);
@@ -47,9 +48,11 @@ export default function AdminDashboard() {
   const takeAction = async (id, action) => {
     try {
       await API.put(`/tickets/action/${id}`, { action });
+      setMessage("Ticket updated successfully.");
       fetchTickets();
     } catch (err) {
       console.error(err);
+      setMessage("Ticket action failed. Please try again.");
     }
   };
   const statusColor = (status) => {
@@ -66,6 +69,7 @@ export default function AdminDashboard() {
     <div className="content">
       <div className="dashboard admin-dashboard">
         <h2>Admin Dashboard</h2>
+        {message && <p className="auth-message" style={{ color: "#2d6a4f" }}>{message}</p>}
       {error && <p className="auth-message" style={{ color: "#e53e3e" }}>{error}</p>}
       {!error && data && (
         <div className="stats">
@@ -117,6 +121,9 @@ export default function AdminDashboard() {
                   </p>
                   <p style={{ margin: "5px 0", fontSize: "14px" }}>
                     <strong>Current Level:</strong> {ticket.currentRole}
+                  </p>
+                  <p style={{ margin: "5px 0", fontSize: "14px" }}>
+                    <strong>Created By:</strong> {ticket.createdBy?.name || "Unknown"}
                   </p>
                 </div>
               </div>
