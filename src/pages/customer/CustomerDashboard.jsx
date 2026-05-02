@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import API from "../services/api";
 import Profile from "../Profile";
 import { useNavigate } from "react-router-dom";
-import {useAuth} from "../context/AuthContext";
-import { set } from "mongoose";
+import { useAuth } from "../context/AuthContext";
 
 export default function CustomerDashoard() {
   const [data, setData] = useState(null);
-  const {logout}=useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tickets, setTickets] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
   const handleLogout = () => {
     logout();
@@ -55,6 +56,15 @@ export default function CustomerDashoard() {
       console.error(err);
     }
   };
+
+  const totalPages = Math.max(1, Math.ceil(tickets.length / pageSize));
+  const pagedTickets = tickets.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   if (!data) return <p>Loading...</p>;
   return (
@@ -111,22 +121,57 @@ export default function CustomerDashoard() {
       {tickets.length === 0 ? (
         <p style={{ textAlign: "center", color: "#999", marginTop: "20px" }}>No tickets yet</p>
       ) : (
-        tickets.map(ticket => (
-          <div key={ticket._id} style={{
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            padding: "15px",
-            marginBottom: "15px",
-            backgroundColor: "#fff",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-          }}>
-            <h4 style={{ margin: "0 0 8px 0", color: "#333" }}>{ticket.title}</h4>
-            <p style={{ color: "#666", margin: "8px 0" }}>{ticket.description}</p>
-            <p style={{ margin: "8px 0", fontSize: "14px" }}>
-              <strong>Status:</strong> <span style={{ color: "#2196F3", fontWeight: "bold" }}>{ticket.status}</span>
-            </p>
+        <>
+          {pagedTickets.map((ticket) => (
+            <div key={ticket._id} style={{
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              padding: "15px",
+              marginBottom: "15px",
+              backgroundColor: "#fff",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+            }}>
+              <h4 style={{ margin: "0 0 8px 0", color: "#333" }}>{ticket.title}</h4>
+              <p style={{ color: "#666", margin: "8px 0" }}>{ticket.description}</p>
+              <p style={{ margin: "8px 0", fontSize: "14px" }}>
+                <strong>Status:</strong> <span style={{ color: "#2196F3", fontWeight: "bold" }}>{ticket.status}</span>
+              </p>
+            </div>
+          ))}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px" }}>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              style={{
+                padding: "8px 14px",
+                backgroundColor: currentPage === 1 ? "#ccc" : "#2196F3",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: currentPage === 1 ? "not-allowed" : "pointer"
+              }}
+            >
+              Previous
+            </button>
+            <span style={{ fontSize: "14px", color: "#333" }}>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              style={{
+                padding: "8px 14px",
+                backgroundColor: currentPage === totalPages ? "#ccc" : "#2196F3",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: currentPage === totalPages ? "not-allowed" : "pointer"
+              }}
+            >
+              Next
+            </button>
           </div>
-        ))
+        </>
       )}
 
       <button onClick={handleLogout} style={{
